@@ -1,5 +1,23 @@
 const inquirer = require("inquirer");
-// const mysql2 = require("mysql2");
+const mysql = require("mysql2");
+
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        // MySQL username,
+        user: 'root',
+        // MySQL password
+        password: '',
+        database: 'employee_list_db'
+    },
+    console.log(`Connected to the employee_list_db.`)
+);
+
+const viewEmployees = function () {
+    db.query('SELECT * FROM employees', function (err, res) {
+        err ? console.log(err) : console.log(res)
+    });
+}
 
 const actionArray = [
     {
@@ -22,7 +40,7 @@ const actionChoice = function () {
     inquirer.prompt(actionArray).then((response) => {
         switch (response.action) {
             case 'View All Employees':
-                // viewEmployees();
+                viewEmployees();
                 console.log("Viewed Employees");
                 actionChoice();
                 break;
@@ -60,6 +78,7 @@ const actionChoice = function () {
                 console.log("Exiting Application")
                 break;
         }
+
     })
 }
 

@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
+const cTable = require('console.table');
 
 const db = mysql.createConnection(
     {
@@ -13,9 +14,21 @@ const db = mysql.createConnection(
     console.log(`Connected to the employee_list_db.`)
 );
 
+const viewDepartments = function () {
+    db.query('SELECT name as Deparment, id as ID FROM departments;', function (err, res) {
+        err ? console.log(err) : console.table(res)
+    });
+}
+
+const viewRoles = function () {
+    db.query('SELECT title as Title, roles.id as ID, departments.name as Department, salary as Salary FROM roles JOIN departments ON roles.department_id = departments.id;', function (err, res) {
+        err ? console.log(err) : console.table(res)
+    });
+}
+
 const viewEmployees = function () {
-    db.query('SELECT * FROM employees', function (err, res) {
-        err ? console.log(err) : console.log(res)
+    db.query('SELECT employees.id as ID, first_name as FirstName, last_name as LastName, roles.title as Role, departments.name as Department, roles.salary as Salary, employees.manager_id as Manager  FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id;', function (err, res) {
+        err ? console.log(err) : console.table(res)
     });
 }
 
@@ -41,7 +54,6 @@ const actionChoice = function () {
         switch (response.action) {
             case 'View All Employees':
                 viewEmployees();
-                console.log("Viewed Employees");
                 actionChoice();
                 break;
             case 'Add Employee':
@@ -55,7 +67,7 @@ const actionChoice = function () {
                 actionChoice();
                 break;
             case 'View All Roles':
-                // viewRoles();
+                viewRoles();
                 console.log("Viewed Roles");
                 actionChoice();
                 break;
@@ -65,8 +77,7 @@ const actionChoice = function () {
                 actionChoice();
                 break;
             case 'View All Departments':
-                // viewDepartments();
-                console.log("Viewed Departments");
+                viewDepartments();
                 actionChoice();
                 break;
             case 'Add Department':
@@ -75,7 +86,7 @@ const actionChoice = function () {
                 actionChoice();
                 break;
             case 'Quit':
-                console.log("Exiting Application")
+                db.end(console.log("Exiting Application"))
                 break;
         }
 

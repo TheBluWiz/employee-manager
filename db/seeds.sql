@@ -1,10 +1,10 @@
-INSERT INTO departments (d_name)
+INSERT INTO departments (name)
 VALUES ("Product Zone"),
         ("Genius Bar"),
         ("Backstage"),
         ("People");
 
-INSERT INTO roles (title, salary, d_id)
+INSERT INTO roles (title, salary, department_id)
 VALUES ("Specialist", 20.00, 1),
         ("Expert", 22.00, 1),
         ("Pro", 24.00, 1),
@@ -19,7 +19,7 @@ VALUES ("Specialist", 20.00, 1),
         ("Manager", 38.00, 4),
         ("Senior Manager", 44.00, 4);
 
-INSERT INTO employees (first_name, last_name, r_id, m_id)
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
 Values ("John", "Young", 13, 1), 
         ("Angela", "Julian", 12, 1), 
         ("Jehyun", "Jung", 12, 1),

@@ -5,12 +5,12 @@ USE employee_list_db;
 
 CREATE TABLE departments (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50)
+    name VARCHAR(50) UNIQUE
 );
 
 CREATE TABLE roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30) NOT NULL,
+    title VARCHAR(30) NOT NULL UNIQUE,
     salary DEC(10, 2),
     department_id INT NOT NULL,
     FOREIGN KEY (department_id)

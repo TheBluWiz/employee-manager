@@ -14,7 +14,7 @@ const db = mysql.createConnection(
 );
 
 const viewDepartments = function () {
-    db.promise().query('SELECT name as Department, id as ID FROM departments;')
+    db.promise().query('SELECT name as Department, id as ID FROM departments ORDER BY id;')
         .then(([rows, fields]) => {
             console.table(rows);
             actionChoice();
@@ -27,7 +27,7 @@ const viewDepartments = function () {
 }
 
 const viewRoles = function () {
-    db.promise().query('SELECT title as Title, roles.id as ID, departments.name as Department, salary as Salary FROM roles JOIN departments ON roles.department_id = departments.id;')
+    db.promise().query('SELECT title as Title, roles.id as ID, departments.name as Department, salary as Salary FROM roles JOIN departments ON roles.department_id = departments.id ORDER BY roles.title;')
         .then(function ([rows, fields]) {
             console.table(rows)
             actionChoice();
@@ -39,7 +39,7 @@ const viewRoles = function () {
 }
 
 const viewEmployees = function () {
-    db.promise().query('SELECT employees.id as ID, employees.first_name as FirstName, employees.last_name as LastName, roles.title as Role, departments.name as Department, roles.salary as Salary, CONCAT(emp.first_name, " ", emp.last_name) as Manager  FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id JOIN employees emp ON employees.manager_id = emp.id;')
+    db.promise().query('SELECT employees.id as ID, employees.first_name as FirstName, employees.last_name as LastName, roles.title as Role, departments.name as Department, roles.salary as Salary, CONCAT(emp.first_name, " ", emp.last_name) as Manager  FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id JOIN employees emp ON employees.manager_id = emp.id ORDER BY employees.first_name, employees.last_name;')
         .then(function ([rows, fields]) {
             console.table(rows)
             actionChoice();
@@ -190,54 +190,54 @@ const updateEmployee = function () {
     let rolesObject = {};
     let employee;
     let role;
-    
+
     db.promise().query('SELECT * FROM employees;')
-    .then(function ([rows, fields]) {
-        employeeObject = rows;
-        employeeObject.map(function (element) {
-            employeeList.push(`${element.first_name} ${element.last_name}`)
-        })
-        db.promise().query('SELECT * FROM roles;')
         .then(function ([rows, fields]) {
-            rolesObject = rows;
-            rolesObject.map(function (element) {
-                rolesList.push(element.title)
+            employeeObject = rows;
+            employeeObject.map(function (element) {
+                employeeList.push(`${element.first_name} ${element.last_name}`)
             })
-            inquirer.prompt([
-                {
-                    type: 'list',
-                    message: "Which employee do you want to update? ",
-                    choices: employeeList,
-                    name: 'employee'
-                },
-                {
-                    type: 'list',
-                    message: 'Which role do you want to assign the selected employee? ',
-                    choices: rolesList,
-                    name: 'role'
-                }
-            ])
-            .then((response) => {
-                employeeObject.forEach(element => {
-                    if ((`${element.first_name} ${element.last_name}`) === response.employee) employee = element.id;
-                });
+            db.promise().query('SELECT * FROM roles;')
+                .then(function ([rows, fields]) {
+                    rolesObject = rows;
+                    rolesObject.map(function (element) {
+                        rolesList.push(element.title)
+                    })
+                    inquirer.prompt([
+                        {
+                            type: 'list',
+                            message: "Which employee do you want to update? ",
+                            choices: employeeList,
+                            name: 'employee'
+                        },
+                        {
+                            type: 'list',
+                            message: 'Which role do you want to assign the selected employee? ',
+                            choices: rolesList,
+                            name: 'role'
+                        }
+                    ])
+                        .then((response) => {
+                            employeeObject.forEach(element => {
+                                if ((`${element.first_name} ${element.last_name}`) === response.employee) employee = element.id;
+                            });
 
-                rolesObject.forEach(element => {
-                    if (element.title === response.role) role = element.id
-                })
+                            rolesObject.forEach(element => {
+                                if (element.title === response.role) role = element.id
+                            })
 
-                db.promise().query('UPDATE employees SET role_id = ? WHERE id = ?;', [role, employee])
-                .then((res, err) => {
+                            db.promise().query('UPDATE employees SET role_id = ? WHERE id = ?;', [role, employee])
+                                .then((res, err) => {
 
-                    console.log("Employee Updated!");
-                    actionChoice();
+                                    console.log("Employee Updated!");
+                                    actionChoice();
+                                })
+                                .catch(() => {
+                                    console.log(err)
+                                })
+                        })
                 })
-                .catch(() => {
-                    console.log(err)
-                })
-            })
         })
-    })
 }
 
 const actionChoice = function () {
@@ -249,10 +249,10 @@ const actionChoice = function () {
                 'View All Departments',
                 'View All Roles',
                 'View All Employees',
+                'Add Department',
+                'Add Role',
                 'Add Employee',
                 'Update Employee Role',
-                'Add Role',
-                'Add Department',
                 'Quit'],
             name: "action"
         }

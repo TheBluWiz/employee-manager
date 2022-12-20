@@ -1,25 +1,31 @@
 INSERT INTO departments (name)
-VALUES ("Grocery"),
-        ("Electronics"),
-        ("Shipping"),
-        ("Home Goods"),
-        ("People");
+VALUES ("People"),
+        ("Teachers"),
+        ("Operations"),
+        ("Students");
 
 INSERT INTO roles (title, salary, department_id)
-VALUES ("Manager", 100000, 4),
-        ("Sales", 40000, 4),
-        ("Grocer", 40000, 1),
-        ("Freight Handler", 40000, 3),
-        ("Repair", 45000, 2);
+VALUES ("Manager", 25000, 1),
+        ("Transfiguration", 10000, 2),
+        ("Charms", 10000, 2),
+        ("Potions", 10000, 2),
+        ("Herbology", 10000, 2),
+        ("Grounds Keeper", 10000, 3),
+        ("Care Taker", 10000, 3),
+        ("Head Boy", 0, 4),
+        ("Student", -500, 4);
         
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
-Values ("John", "Young", 1, 1), 
-        ("Angela", "Julian", 1, 1), 
-        ("Jehyun", "Jung", 1, 1),
-        ("Jessica", "", 1, 1),
-        ("Nick", "Gambino", 1, 1),
-        ("Jamey", "Wicklund", 2, 2), 
-        ("Ravi", "Nagi", 3, 3),
-        ("Rhys", "Smoker", 4, 4),
-        ("Tristan", "L", 5, 5);
+Values ("Albus", "Dumbledore", 1, 1), 
+        ("Minerva", "McGonagall", 2, 1), 
+        ("Filius", "Flitwick", 3, 1),
+        ("Severus", "Snape", 4, 1),
+        ("Pomona", "Sprout", 5, 1),
+        ("Rubeus", "Hagrid", 6, 1), 
+        ("Argus", "Filtch", 7, 1),
+        ("Percy", "Weasley", 8, 2),
+        ("Harry", "Potter", 9, 2),
+        ("Draco", "Malfoy", 9, 4),
+        ("Padma", "Patil", 9, 3),
+        ("Cedric", "Diggory", 8, 5);

@@ -182,6 +182,63 @@ const addEmployee = function () {
         })
 }
 
+const updateEmployee = function () {
+    let employeeList = [];
+    let employeeObject = {};
+    let rolesList = [];
+    let rolesObject = {};
+    let employee;
+    let role;
+    
+    db.promise().query('SELECT * FROM employees;')
+    .then(function ([rows, fields]) {
+        employeeObject = rows;
+        employeeObject.map(function (element) {
+            employeeList.push(`${element.first_name} ${element.last_name}`)
+        })
+        db.promise().query('SELECT * FROM roles;')
+        .then(function ([rows, fields]) {
+            rolesObject = rows;
+            rolesObject.map(function (element) {
+                rolesList.push(element.title)
+            })
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    message: "Which employee do you want to update? ",
+                    choices: employeeList,
+                    name: 'employee'
+                },
+                {
+                    type: 'list',
+                    message: 'Which role do you want to assign the selected employee? ',
+                    choices: rolesList,
+                    name: 'role'
+                }
+            ])
+            .then((response) => {
+                employeeObject.forEach(element => {
+                    if ((`${element.first_name} ${element.last_name}`) === response.employee) employee = element.id;
+                });
+
+                rolesObject.forEach(element => {
+                    if (element.title === response.role) role = element.id
+                })
+
+                db.promise().query('UPDATE employees SET role_id = ? WHERE id = ?;', [role, employee])
+                .then((res, err) => {
+
+                    console.log("Employee Updated!");
+                    actionChoice();
+                })
+                .catch(() => {
+                    console.log(err)
+                })
+            })
+        })
+    })
+}
+
 const actionChoice = function () {
     inquirer.prompt([
         {
@@ -219,8 +276,7 @@ const actionChoice = function () {
                 addEmployee();
                 break;
             case 'Update Employee Role':
-                // updateRole();
-                console.log("Updated Employee Role");
+                updateEmployee();
                 break;
             case 'Quit':
                 db.end(console.log("Exiting Application"))

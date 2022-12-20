@@ -39,7 +39,7 @@ const viewRoles = function () {
 }
 
 const viewEmployees = function () {
-    db.promise().query('SELECT employees.id as ID, first_name as FirstName, last_name as LastName, roles.title as Role, departments.name as Department, roles.salary as Salary, employees.manager_id as Manager  FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id;')
+    db.promise().query('SELECT employees.id as ID, employees.first_name as FirstName, employees.last_name as LastName, roles.title as Role, departments.name as Department, roles.salary as Salary, CONCAT(emp.first_name, " ", emp.last_name) as Manager  FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments ON roles.department_id = departments.id JOIN employees emp ON employees.manager_id = emp.id;')
         .then(function ([rows, fields]) {
             console.table(rows)
             actionChoice();
@@ -82,7 +82,6 @@ const addRole = function () {
             rows.map(function (element) {
                 currentDepartmentsArray.push(element.Department)
             })
-            console.log(`These Departments are available as questions ${currentDepartmentsArray}`);
             inquirer.prompt([
                 {
                     type: "prompt",
@@ -139,6 +138,9 @@ const addEmployee = function () {
                     managerObj.map(function (element) {
                         managerList.push(element.Manager)
                     })
+
+                    if (managerList.length < 1) managerList = ["null"]
+
                     inquirer.prompt([
                         {
                             type: "prompt",
@@ -168,13 +170,13 @@ const addEmployee = function () {
                                 if (element.Manager === res.manager) manager = element.ID;
                             });
                             roleObj.forEach(element => {
-                                if(element.title === res.role) role = element.id
+                                if (element.title === res.role) role = element.id
                             })
                             db.promise().query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [res.first_name, res.last_name, role, manager])
-                            .then(() => {
-                                console.log("Employee Added!");
-                                actionChoice();
-                            })
+                                .then(() => {
+                                    console.log("Employee Added!");
+                                    actionChoice();
+                                })
                         })
                 })
         })

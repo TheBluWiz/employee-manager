@@ -139,7 +139,7 @@ const addEmployee = function () {
                         managerList.push(element.Manager)
                     })
 
-                    if (managerList.length < 1) managerList = ["null"]
+                    if (managerList.length < 1) managerList = ["Self"]
 
                     inquirer.prompt([
                         {
@@ -169,6 +169,7 @@ const addEmployee = function () {
                             managerObj.forEach(element => {
                                 if (element.Manager === res.manager) manager = element.ID;
                             });
+                            if (!manager) manager = 1;
                             roleObj.forEach(element => {
                                 if (element.title === res.role) role = element.id
                             })

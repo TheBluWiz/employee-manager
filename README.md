@@ -24,7 +24,11 @@
   - Delete departments, roles, and employees
   - View the total utilized budget of a department (the combined salaries of all employees of a department)
 
-  If an company were to actually choose to implement this software, I would love to update it to include payroll information. There are many situational variables for this that differ state to state that would need to be considered prior to development though.
+  I would also like to include error reporting and guidance. At present this is most critical when establishing the database. Currently the program crashes in the following circumstances.
+  - Attempting to add role when there are no departments
+  - Attempting to add employee when there are no roles
+
+  If a company were to actually choose to implement this software, I would love to update it to include payroll information. There are many situational variables for this that differ state to state that would need to be considered prior to development. Lets collaborate!!
   ## Contributing
   I'm always open to bug fixes or feature reccomendations. Feel free to fork the repo and then submit a pull request with your code. You can also reach me at the email in the questions section below to collaborate.
   ## Questions

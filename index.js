@@ -74,7 +74,7 @@ const addDepartment = function () {
 const addRole = function () {
     let currentDepartmentsArray = [];
     let currentDepartmentsObj = {};
-    db.promise().query('SELECT name as Department, id as ID FROM departments;')
+    db.promise().query('SELECT name as Department, id as ID FROM departments ORDER BY name;')
         .then(function ([rows, fields]) {
             currentDepartmentsObj = rows;
             currentDepartmentsArray = [];
@@ -124,7 +124,7 @@ const addEmployee = function () {
     let role;
     let manager;
 
-    db.promise().query('SELECT * FROM roles;')
+    db.promise().query('SELECT * FROM roles ORDER BY title;')
         // Consider using promise all for these
         .then(function ([rows, fields]) {
             roleObj = rows;
@@ -132,7 +132,7 @@ const addEmployee = function () {
                 roleList.push(element.title)
             })
         }).then(() => {
-            db.promise().query("Select CONCAT (first_name, ' ', last_name) as Manager, id as ID FROM employees WHERE role_id = 1")
+            db.promise().query("Select CONCAT (first_name, ' ', last_name) as Manager, id as ID FROM employees WHERE role_id = 1 ORDER BY first_name, last_name")
                 .then(function ([rows, fields]) {
                     managerObj = rows;
                     managerObj.map(function (element) {

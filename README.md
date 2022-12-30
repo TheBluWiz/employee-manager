@@ -16,6 +16,11 @@
   Command line prompts ask for user input and then update the database.
   ## Walkthrough Video
 
+
+https://user-images.githubusercontent.com/88697112/208800046-1eb99a49-5287-4131-b5de-498721ae4e24.mov
+
+
+  
   ## Moving Forward
   Additional features to come:
   - Update employee managers
@@ -23,12 +28,7 @@
   - View employees by department
   - Delete departments, roles, and employees
   - View the total utilized budget of a department (the combined salaries of all employees of a department)
-
-
-https://user-images.githubusercontent.com/88697112/208800046-1eb99a49-5287-4131-b5de-498721ae4e24.mov
-
-
-  I would also like to include error reporting and guidance. At present this is most critical when establishing the database. Currently the program crashes in the following circumstances.
+I would also like to include error reporting and guidance. At present this is most critical when establishing the database. Currently the program crashes in the following circumstances.
   - Attempting to add role when there are no departments
   - Attempting to add employee when there are no roles
 
